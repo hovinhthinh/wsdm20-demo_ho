@@ -1,0 +1,229 @@
+%!TEX root = ../main.tex
+
+\section{Introduction}\label{sec:intro}
+
+
+%Quantities, such as \$2B, 40 mpg or 19.19 s, are more than mere numbers; they express measures 
+%like revenue, fuel consumption or time in a race with a numeric value and a corresponding unit. 
+%The occurrence of a quantity in the text or a table of a web page is associated with an entity and interpretable only with the surrounding context. 
+%The interpretation of these quantities is only possible through the associated entities and in context. 
+%For example, in the sentence “BMW i8 costs about 138k Euros in Germany and has a battery range between 50 and 60 km.”, the quantity e138.000 (after normalization) refers to the price of the car model BMW i8, and the quantity interval [50,60]km denotes the range for that car (note that this is in electric mode only as this is a hybrid car).
+
+%\noindent \textbf{Motivation.} Quantities appeared in the text or a table carry significant information about associated entities. Such quantities express more than a numeric value, can only be interpreted with the local context.
+%For instance, in the sentence like \textit{``Tesla model S costs about \$ 99k
+%in USA''},
+%the quantity \$ 99K indicates the cost of the car model in dollar. 
+%In a question answering system quantities can be a part of the answer for a query about an entity, e.g., ``Cost of Telsa S'', or it can be a part of the question itself, e.g., ``electric cars with price less than \$100K''.
+
+\noindent \textbf{Motivation.} Search engines have gone a long way towards understanding
+entities and their types in online contents and user queries,
+by learning information extraction and 
+leveraging their knowledge graphs \cite{DBLP:journals/cacm/NoyGJNPT19}.
+For example, a query about \textit{``Bezos's net worth''}
+returns the direct answer 113.5 Bio. USD by recognizing
+the entity Jeff Bezos.
+Likewise, a query with a type description like \textit{``athletes who won 200m olympics''}
+returns a crisp list of entities, including Usain Bolt and others.
+
+These capabilities for semantic search \cite{DBLP:journals/ftir/BastBH16, DBLP:conf/rweb/BastS18, DBLP:conf/ecir/GarigliottiB18}
+%cite survey articles on semantic search here
+%perhaps include one paper on QA 
+have limitations, though.
+One of them is the limited understanding of {\em quantities},
+that is, quantitative measures of entities with a value and a unit, e.g.,
+the personal wealth of a person, the annual
+revenue of a company, the time of a 200m race's winner,
+the fuel consumption of a car, and so on.
+Looking up quantities for given entities is straightforward
+and well supported. However, evaluating search conditions
+about quantities is beyond the abilities of today's search engines. %, which requires .
+Consider example queries such as:
+
+\begin{itemize}
+	\item CEOs with a net worth of more than 100 Billion dollars
+	\item Athletes who ran 200m under 20 seconds
+	\item Hybrid cars with a battery range above 50 km
+\end{itemize}
+
+%\squishend
+
+Depending on the values in these queries and the way the units
+are specified, major search engines occasionally return good results for
+some of the queries. 
+For example, the third query, with the twist that the unit is
+changed to miles, returns a short list of car models ranked
+by electric range, however all these are from a list of a single web page.
+Changing the condition of the query from 50 km to 45 km returns a different list where all results
+are incorrect (their electric range is lower than 45 miles).
+If we change the value to 57, the search engine
+falls back to the ten-blue-links mode and returns web pages
+rather than entities.
+The underlying reason for these deficiencies is that the search
+engines do not understand quantities; instead they merely
+match tokens that denote numbers and units as if they were keywords.
+The occasional cases with good results are, by and large, accidental
+(drawing from many high-quality lists and tables within web pages).
+
+
+
+
+%1 par approach: Qsearch in a nutshell
+\noindent \textbf{Proposed Approach.} The prototype system presented in this demo paper, called {\em Qsearch},
+is an approach to overcome the outlined limitations.
+Qsearch supports queries about entity types with search conditions
+about quantities. The queries can take the form of keywords, telegraphic phrases
+or full-fledged questions. The above examples can be handled by Qsearch.
+Each produces ranked lists of entity-level results with evidence sentences
+that the quantity condition is satisfied.
+Measures within the scope of the prototype include financial quantities
+(e.g., company revenues or earnings or prices of company acquisitions),
+physical and technical measures of devices (e.g., range or fuel consumption
+of cars, battery capacity of mobiles, energy consumption of data centers),
+times and distances in sport competitions, and more.
+
+%1 par on Qsearch methodology
+Qsearch is based on three main components (see \cite{HoISWC2019} for full details).
+First, text corpora are processed with a neural method for extracting
+quantities, the entities to which they refer, and informative cue words from
+their joint context, which are represented in the form of triples $(e,q, X)$ - \textit{(entity, quantity, context)}, called \textit{Qfact}. 
+For instance, from the text \textit{``Tesla S costs 65k Euros in Germany''}, we extract Qfact: $(\textit{Tesla S}; \textit{\euro 65.000};\{\textit{costs, Germany}\})$.
+Second, a query is decomposed into \textit{entity type}, \textit{quantity condition} and
+important \textit{context} cue words, which are also casted into a triple $(t^*,q^*, X^*)$, called \textit{Qquery}. 
+For example, query \textit{``Cars with price less than \euro 35,000 in Germany''} is modeled as Qquery: $(\textit{car}; < \hspace{-0.25em} \textit{\euro 35.000}; \{\textit{price, Germany}\})$. The query processing matches Qquery against
+extracted Qfacts from text snippets.
+Third, the query results are judiciously ranked using language models
+or other criteria (e.g., entity prominence or quantity value).
+
+%Quantities are common in search queries, for example to find a product within a specific price range,  cars or mobile phones with desired technical or environmental properties, or athletes who ran a race in a certain time. 
+% When a user issues a quantity search query, such as \textit{``Hybrid cars with price under 35,000 Euros''}, 
+ %and battery range above 100 km
+% she expects the search engine to understand the quantities and to return relevant answers as a list of entities instead of documents.
+%The relevant answer here is a list of cars that are ``less than 35,000 Euros'' and ``battery range more than 100km''. 
+%However, Internet search engines treat quantities largely as strings ignoring their values and unit of measurements. As a result, they cannot handle numeric comparisons, they miss out on units
+%or scale factors (such as ``k'' in ``138k''), do not know about
+%necessary conversions between units,  and ultimately fail.
+%The exceptional cases where search engines 
+%(incl. vertical product search) provide 
+%support for coping with quantities are money and date,
+%but this is achieved by specialized techniques and 
+%fairly limited. 
+%\input{tables/kg_stats}
+%One would hope that semantic search over knowledge graphs (KG) like DBpedia
+%, Yago or Wikidata goes further,
+%but they provide a very low coverage of quantitative facts; 
+%but their coverage of quantitative facts is very limited and most literals, apart from dates, are merely represented as strings.
+%; e.g., battery capacity of the BMW i3 is shown as the string
+%\textit{``i3 94 A·h: 33 kWh lithium-ion battery''} in DBpedia.
+%Important properties for cars, like fuel consumption, CO2 emission, etc. are not covered at all.
+
+
+%display size for mobile phones are represented by number without any associated unit in DBpedia. 
+%%The length of the Mercedes-Benz O405 is shown as \textit{``11.1 m''} 
+%The weight of the racing car Williams FW07 is shown as \textit{``: 585 kg''} 
+%%in DBpedia 
+%-- again just a string that is useless for queries with comparisons 
+%like vehicles with \textit{``length more than 10 meters''} or \textit{``length above 30 feets''}.
+%like cars with \textit{``weight more than 500 kilograms''} or \textit{``weight above 1000 pounds''}.
+
+%in either DBpedia or Wikidata.
+%though these informations are mentioned in additional comments in form of text. 
+ %Table \ref{table:kg_stats} gives exemplary numbers for the quantity coverage in Wikidata and DBpedia.
+%show such low coverage of quantitative facts available in these KGs.
+%For some cars like Tesla Model X, the range is shown in the form ``257$\pm$1 mile'' in Wikidata-- again just a string, while API returns simply a point value, 257 mile, rather providing the range that is useless for queries with comparisons 
+%the length of the BMW i8 is shown as ``4,689 millimeter'' in Wikidata;
+%like ``range above 250 miles''
+%or ``range above 400 km''.
+% For example, the range of the Tesla Model X is shown as ``257$\pm$1 mile'' in Wikidata -- just a string that is useless for queries with comparisons like ``range above 250 miles'' or ``range above 400 km''; fuel consumption, CO2 emission, etc. are not covered at all.
+
+%Moreover, question answering systems over linked data (incl. KGs)
+%have rarely considered quantities in search condition, e.g., a popular benchmark for quantity queries, QALD-6-task-3~\cite{DBLP:journals/semweb/UsbeckRHCHNDU19}, contains only 6 queries with quantity conditions out of 150.
+
+%While range, display size and personal best time are important properties for entity types car, mobile and marathon runner, respectively; these data are not available at all, or the data type is not always included. The exception is stadium capacity, but the number in this case is dimensionless, which is easier to handle.
+
+%Several form-based search engines were created to counter this issue, such as specialized products search engines. However, these form-based search engines are tedious to use and only covers a specific class of items, normally stored in a single relational database. 
+
+%It is complex to find the central entitiy, and 
+%uantities appear in search queries in numerous forms: to find a product within a specific price range, to locate a country with an increasing GDP, to explore movies produced in a specific year, to identify athletes who won multiple Olympic medals, among others. They represent an indispensable part of the query that defines the set of the possible answers. Therefore, they necessitate special handling to understand them within their context.
+
+%the current gap in the search engines
+ %Natural language queries involving quantities are common. However, modern search engines fail to answer them. Most of the search engines are keyword-based or entity-based.
+
+ %As a result, they treat quantities as a string ignoring their values and unit of measurements.  Moreover, search engines usually retrieve a ranked list of webpages, except for some cases at which search queries involves prominent entities or events.   
+
+
+ 
+%\noindent \textbf{Proposed Approach.}
+%We demonstrate Qsearch \cite{HoISWC2019}, an end-to-end system for answering quantity queries from text,  over a wide variety of expressive measures, to overcome
+%this severe limitation of today's search engines and knowledge graphs.
+%%We define our problem as follows.
+%Given a quantity query and a corpus of text pages, 
+%find a ranked list of entities that match the given query. 
+%
+%The computational framework used by Qsearch for representing quantitative information has been introduced in our previous work \cite{HoISWC2019}. In particular, we model a quantity query (Qquery \cite{HoISWC2019}) as a triple $\mathcal{Y}=(t^*,q^*, X^*)$, where 
+%$t^*$ is the semantic type of the expected answers, 
+%$q^*$ is a quantity-centric search condition, and 
+%$X^*$ is a context conditon, a bag of words describing the connection between entity type  $t^*$ and quantity condition $q^*$. For example, for the query  \textit{``Cars with price less than \euro 35,000 in Germany''}, the triple $(t^*,q^*, X^*)$ is: $(\textit{car}; < \textit{\euro 35.000}; \{\textit{price, Germany}\})$.
+%
+%Analogously, we model a quantity fact (Qfact \cite{HoISWC2019}) as a triple $\mathcal{F}=(e,q, X)$, where
+%$e$ is an entity, 
+%$q$ is a quantity, and 
+%$X$ is the context that connects entity $e$ with quantity $q$.
+%For example, from the text snippet \textit{``BMW i8 costs about 138k Euros in Germany and has a battery range between 50 and 60 km.''}, we can extract two Qfacts:
+%$\mathcal{F}_1: (\textit{BMW i8}; \approx\hspace{-0.25em} \textit{\euro 138.000}; \{\textit{costs, Germany}\})$
+%and $\mathcal{F}_2: (\textit{BMW i8};\\ \textit{50-60 km}; \{ \textit{range, battery} \})$.
+%
+%
+%With this representation of queries and facts, our problem has two dimensions.
+%The first is to understand the content of the text snippets and extract the relevant Qfacts. The second is to match such extracted
+%assertions (inevitably with noise and errors) against the Qquery
+%and compute a ranked list of relevant entity answers.
+%
+%For the first component, 
+%Qsearch employs a deep neural network
+%to extract Qfacts from text, lifting textual information into semantic structures.
+%Then for the second component, it utilizes a statistical matching model to retrieve a ranked list of relevant entities that answer the user's Qquery.
+
+%We model the first component, Qfact extraction, as a Semantic Role Labeling (SRL) task \cite{DBLP:journals/coling/GildeaJ02} and devise a 
+%deep learning method to label words in the sentences with relevant roles; then use these tags to extract quantity fact triples.
+%%We label each word as entity, quantity or context (or other). 
+%%Then we use these tags to extract quantity fact triples in form of \textit{(entity, quantity, context)}.
+%For the second component, query matching, we devise a 
+%novel
+%matching method to retrieve 
+
+%On the other hand, we preprocess the corpus of web documents into triples of $(E,Q,X)$, where $E$ is an entity, $Q$ is a quantity related to $E$, and $X$ is the context defining the relation between $E$ and $Q$. For example, the triple \textit{(BMW i8, \{costs, Germany\}, \euro 138.000)} corresponds to the following sentence: \textit{``The BMW i8 costs about \euro 138k in Germany.''}
+ %Then, we semantically match the query to the facts we extract from the web corpus. We generate a ranked list of objects matching the query.
+%challanges 
+%how we do it
+%We split the quantity search problem into two essential components: 
+%(i)\emph{Quantity-fact extraction from text} (ii)\emph{Query matching}
+
+%more about the approach here!
+
+%We design a full-fledged system that answers complex quantity queries. preprocesses web content, index them, and answers complex quantity queries in an efficient manner.  Our system extracts quantity-related facts from web pages and stores them as a triple of  $(E, Q, X)$. It transforms the problem to a \emph{Semantic Role Labelling} task and employs a \emph{Deep Semantic Role Labeling (DSRL)} model to label sentences. % with $E$, $Q$, and $X$ tags.
+
+%\subsubsection{Limitations of Prior Work.}
+%\subsubsection{Outlook}
+% research focused on answering quantity queries 
+%recent work covering quantity extraction and fact extraction
+%QA
+
+%%%GW: this is too long for here (intro)
+%Though, some of the previous work tackled, binary and n-ary quantity fact extraction~\cite{DBLP:conf/www/ErnstSW18} and semantic annotation of quantities\cite{DBLP:conf/cikm/IbrahimRW16, Ibrahim:ICDE2019}, none of them looked into how to harness these semantic annotations to answer quantity-related queries. 
+%Zhang et al.~\cite{DBLP:conf/sigmod/ZhangC13} consider semantic matching of quantities on web tables, but did not give attention to quantities in natural text.  The work of Banerjee et al.~\cite{DBLP:conf/sigir/BanerjeeCR09} answers quantity consensus queries, however, they only consider binary relations and rely on hand-crafted rules. 
+%State of the art retrieval models do not focus on quantity queries nor do they consider extracting quantity facts from the text. On the other hand factoid question answering (QA) systems merely function as a quantity-lookup form structured semantic knowledge. Other QA systems have been proposed to answer reading comprehension questions, however, they do not aggregate answers from multiple sources and they focus on general questions rather than quantity queries. 
+
+
+%On the other hand, we employ \emph{Deep Semantic Role Labeling  (DSRL)} to extract n-ary quantity facts, and provide a robust system to process and answer quantity queries.
+
+\noindent \textbf{Outline.}
+In Section \ref{sec:system_overview}, we briefly describe the architecture of Qsearch and the approach underlying its main components. Afterwards, we illustrate the features provided by our demonstration through graphical user interface in Section \ref{sec:demo}. Finally, Section \ref{sec:related-work} mentions related work and Section \ref{sec:conclusion} concludes the paper. We make our demo available to the research community at the following URL: \textcolor{blue}{\url{https://qsearch.mpi-inf.mpg.de/}}
+
+%The salient contributions of this work are as follows:
+%\begin{itemize}
+%\item We present Qsearch, a system for answering quantity queries from text.
+%\item We propose a deep neural network for quantity fact extraction, and a matching model for answering quantity queries.
+%\item  We present extensive experiments on benchmark queries collected by crowdsourcing.%, demonstrating the effectiveness of our approach with respect to the correctness of answers.
+
+%\item We make code, data and a running demo available to the research community at\\{\small\url{http://anonymous-for-double-blind-review/}}.
+%\end{itemize}

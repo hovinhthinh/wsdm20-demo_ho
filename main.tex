@@ -1,0 +1,318 @@
+%%
+%% This is file `sample-authordraft.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% samples.dtx  (with options: `authordraft')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from sample-authordraft.tex.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file samples.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%%
+%% The first command in your LaTeX source must be the \documentclass command.
+\documentclass[sigconf %,authordraft
+]{acmart}
+\usepackage[T1]{fontenc}
+%\usepackage{lmodern}
+%\usepackage[utf8]{inputenc}
+%\usepackage{amsfonts}
+\usepackage{eurosym}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+%\usepackage{booktabs}
+
+%\usepackage{epsfig} 
+%\usepackage{cite}
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{mathtools}
+%\usepackage{subfig}
+
+    
+\usepackage[para]{footmisc}
+
+\usepackage[inline]{enumitem}
+
+\newtheorem{task}{Task}
+
+%%% \squishlist definition, list with reduced margins
+\newcommand{\squishlist}{
+ \begin{list}{$\bullet$}
+  { \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{3pt}
+     \setlength{\topsep}{3pt}
+     \setlength{\partopsep}{0pt}
+
+
+     \setlength{\leftmargin}{1em}
+     \setlength{\labelwidth}{1em}
+     \setlength{\labelsep}{0.5em} } }
+
+%
+%\newcommand{\squishlisttwo}{
+% \begin{list}{$\bullet$}
+%  { \setlength{\itemsep}{0pt}
+%    \setlength{\parsep}{0pt}
+%    \setlength{	opsep}{0pt}
+%    \setlength{\partopsep}{0pt}
+%    \setlength{\leftmargin}{2em}
+%    \setlength{\labelwidth}{1.5em}
+%    \setlength{\labelsep}{0.5em} } }
+
+\newcommand{\squishend}{
+  \end{list}  }
+%\renewcommand{\baselinestretch}{0.99}
+
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
+%% Rights management information.  This information is sent to you
+%% when you complete the rights form.  These commands have SAMPLE
+%% values in them; it is your responsibility as an author to replace
+%% the commands and values with those provided to you when you
+%% complete the rights form.
+\copyrightyear{2020}
+\acmYear{2020}
+\setcopyright{acmcopyright}
+\acmConference[WSDM '20]{The Thirteenth ACM International Conference on Web Search and Data Mining}{February 3--7, 2020}{Houston, TX, USA}
+\acmBooktitle{The Thirteenth ACM International Conference on Web Search and Data Mining (WSDM '20), February 3--7, 2020, Houston, TX, USA}
+\acmPrice{15.00}
+\acmDOI{10.1145/3336191.3371860}
+\acmISBN{978-1-4503-6822-3/20/02}
+
+%%
+%% Submission ID.
+%% Use this when submitting an article to a sponsored event. You'll
+%% receive a unique submission ID from the organizers
+%% of the event, and this ID should be used as the parameter to this command.
+%%\acmSubmissionID{123-A56-BU3}
+
+%%
+%% The majority of ACM publications use numbered citations and
+%% references.  The command \citestyle{authoryear} switches to the
+%% "author year" style.
+%%
+%% If you are preparing content for an event
+%% sponsored by ACM SIGGRAPH, you must use the "author year" style of
+%% citations and references.
+%% Uncommenting
+%% the next command will enable that style.
+%%\citestyle{acmauthoryear}
+
+%%
+%% end of the preamble, start of the body of the document source.
+\begin{document}
+\fancyhead{}
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+%\title[Searching for Entities with Numerical Constraint in Text]{Searching for Entities with Numerical Constraint in Text}
+\title{Entities with Quantities: Extraction, Search, and Ranking}
+%%
+%% The "author" command and its associated commands are used to define
+%% the authors and their affiliations.
+%% Of note is the shared affiliation of the first two authors, and the
+%% "authornote" and "authornotemark" commands
+%% used to denote shared contribution to the research.
+\author{Vinh Thinh Ho}
+%\authornote{Both authors contributed equally to this research.}
+\email{hvthinh@mpi-inf.mpg.de}
+%\orcid{1234-5678-9012}
+%\author{G.K.M. Tobin}
+%\authornotemark[1]
+%\email{webmaster@marysville-ohio.com}
+\affiliation{%
+  \institution{Max Planck Institute for Informatics}
+%  \streetaddress{P.O. Box 1212}
+  \city{Saarbr\"ucken}
+%  \state{Ohio}
+%  \postcode{43017-6221}
+  \country{Germany}
+}
+
+\author{Koninika Pal}
+\email{kpal@mpi-inf.mpg.de}
+
+\affiliation{%
+  \institution{Max Planck Institute for Informatics}
+  \city{Saarbr\"ucken}
+  \country{Germany}
+}
+
+\author{Niko Kleer}
+\email{nkleer@mpi-inf.mpg.de}
+\affiliation{%
+  \institution{Max Planck Institute for Informatics}
+  \institution{htw saar}
+  \city{Saarbr\"ucken}
+  \country{Germany}
+}
+
+\author{Klaus Berberich}
+\email{kberberi@mpi-inf.mpg.de}
+\affiliation{%
+  \institution{Max Planck Institute for Informatics}
+    \institution{htw saar}
+  \city{Saarbr\"ucken}
+  \country{Germany}
+}
+
+\author{Gerhard Weikum}
+\email{weikum@mpi-inf.mpg.de}
+\affiliation{%
+  \institution{Max Planck Institute for Informatics}
+  \city{Saarbr\"ucken}
+  \country{Germany}
+}
+
+%%
+%% By default, the full list of authors will be used in the page
+%% headers. Often, this list is too long, and will overlap
+%% other information printed in the page headers. This command allows
+%% the author to define a more concise list
+%% of authors' names for this purpose.
+\renewcommand{\shortauthors}{Ho, et al.}
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+
+\begin{abstract}
+	
+ 
+Quantities are more than numeric values. They represent measures for entities, expressed in numbers with associated units. 
+Search queries often include quantities, such as athletes who ran 200m under 20 seconds or companies with quarterly revenue above \$2 Billion. Processing such queries requires
+understanding the quantities, where capturing the surrounding context is an essential part of it. 
+Although modern search engines or QA systems handle entity-centric queries well, they consider numbers and units as simple keywords, and therefore fail to understand the condition (less than, above, etc.), the unit of interest (seconds, dollar, etc.), and the context of the quantity (200m race, quarterly revenue, etc.) 
+As a result, they cannot generate the correct candidate answers.  
+In this work, we demonstrate a prototype QA system, called Qsearch, 
+that can handle advanced queries with quantity constraints using the common cues present in both query and the text sources.
+%Quantities appear in search queries in numerous forms: 
+%to find a products within a specific price range, 
+%to locate a country with an increasing GDP, to identify athletes who won multiple Olympic medals, among others.
+%companies with annual revenue of at least 50 Mio USD, athletes who ran 200 meters faster than 19.5 s, electric cars with range above 400 miles, and so on.
+%Processing such queries requires the understanding of numbers present in the query to capture the contextual information about the queried entities. 
+%Modern search engines and QA systems
+%like Google, Bing, etc. can 
+%efficiently handle queries that involve entities and types, 
+%which need to exploit only relational structures embedded in Web content and social media for queried entities. 
+%But they fail to produce crisp answers to the queries involving numerical constraints as they disregard the reasoning %over quantitative information.
+%but they often fail on properly interpreting quantities in queries and candidate answers
+%when the specifics of the search condition (less than, above, etc.), the units of interest (seconds, miles, meters, etc.)
+%and the context of the quantity matter (annual or quarterly revenue, etc.).
+%  
+%Numeric answers for such queries might appear in various sources, either structured (e.g. tables, lists), or unstructured (e.g. text), where processing unstructured text are more challenging. 
+%Modern search engines like Google, Bing, etc. support queries that involve relational structures embedded in Web content and social media and can provide crisp answers to the queries or questions. However, informative quantities are usually disregarded. 
+%
+%Approach and  Contribution
+
+%tackles queries with numerical constraints by harnessing quantitative  contextual information about entities from text.
+%can effectively answer advanced queries with quantity conditions, based on the evidence from text sources.
+%Our solution is based on a deep neural network for extracting quantity-centric tuples from text sources,
+%and a novel matching model to 
+%retrieve and rank
+%answers 
+%from news articles and other web pages.
+
+%In particular, we propose a framework for representing quantitative information, 
+%an efficient deep neural network for extracting these information from textual data, 
+%produce 
+%for given numerical queries. 
+%Experiments 
+%on real-world data 
+%demonstrate the effectiveness of Qsearch on benchmark queries collected by crowdsourcing.
+
+\end{abstract}
+
+%%
+%% The code below is generated by the tool at http://dl.acm.org/ccs.cfm.
+%% Please copy and paste the code instead of the example below.
+%%
+%\begin{CCSXML}
+%<ccs2012>
+% <concept>
+%  <concept_id>10010520.10010553.10010562</concept_id>
+%  <concept_desc>Computer systems organization~Embedded systems</concept_desc>
+%  <concept_significance>500</concept_significance>
+% </concept>
+% <concept>
+%  <concept_id>10010520.10010575.10010755</concept_id>
+%  <concept_desc>Computer systems organization~Redundancy</concept_desc>
+%  <concept_significance>300</concept_significance>
+% </concept>
+% <concept>
+%  <concept_id>10010520.10010553.10010554</concept_id>
+%  <concept_desc>Computer systems organization~Robotics</concept_desc>
+%  <concept_significance>100</concept_significance>
+% </concept>
+% <concept>
+%  <concept_id>10003033.10003083.10003095</concept_id>
+%  <concept_desc>Networks~Network reliability</concept_desc>
+%  <concept_significance>100</concept_significance>
+% </concept>
+%</ccs2012>
+%\end{CCSXML}
+
+%\ccsdesc[500]{Computer systems organization~Embedded systems}
+%\ccsdesc[300]{Computer systems organization~Redundancy}
+%\ccsdesc{Computer systems organization~Robotics}
+%\ccsdesc[100]{Networks~Network reliability}
+
+%%
+%% Keywords. The author(s) should pick words that accurately describe
+%% the work being presented. Separate the keywords with commas.
+
+\keywords{Semantic Search, Question Answering, Information Extraction,
+%Numeric 
+Quantities}
+
+%% A "teaser" image appears between the author and affiliation
+%% information and the body of the document, and typically spans the
+%% page.
+
+%\begin{teaserfigure}
+%  \includegraphics[width=\textwidth]{sampleteaser}
+%  \caption{Seattle Mariners at Spring Training, 2010.}
+%  \Description{Enjoying the baseball game from the third-base
+%  seats. Ichiro Suzuki preparing to bat.}
+%  \label{fig:teaser}
+%\end{teaserfigure}
+
+%%
+%% This command processes the author and affiliation and title
+%% information and builds the first part of the formatted document.
+\maketitle
+
+\input{sections/10-intro}
+\input{sections/20-CompModelSysOverview}
+\input{sections/90-demonstration.tex}
+\input{sections/70-related_work.tex}
+\input{sections/80-conclusion.tex}
+
+
+%\paragraph*{Acknowledgements.}
+
+%\input{bib.tex}
+
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+
+\end{document}
+\endinput
+%%
+%% End of file `sample-authordraft.tex'.
